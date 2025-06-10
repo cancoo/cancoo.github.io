@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>hexo</title>
+      <link href="/2025/06/10/hexo%E5%91%BD%E4%BB%A4/"/>
+      <url>/2025/06/10/hexo%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><ul><li><p>hexo g  # 完整命令为hexo generate,用于生成静态文件</p></li><li><p>hexo s  # 完整命令为hexo server,用于启动服务器，主要用来本地预览</p></li><li><p>hexo d  # 完整命令为hexo deploy,用于将本地文件发布到github等git仓库上</p></li><li><p>hexo n “my article”  # 完整命令为hexo new,用于新建一篇名为“my article”的文章</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 生活 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> about </tag>
+            
+            <tag> myself </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>魔方教程</title>
       <link href="/2022/10/13/%E9%AD%94%E6%96%B9%E6%95%99%E7%A8%8B/"/>
       <url>/2022/10/13/%E9%AD%94%E6%96%B9%E6%95%99%E7%A8%8B/</url>
