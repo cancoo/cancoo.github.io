@@ -8,7 +8,34 @@
       <link href="/2025/06/10/hexo%E5%91%BD%E4%BB%A4/"/>
       <url>/2025/06/10/hexo%E5%91%BD%E4%BB%A4/</url>
       
-        <content type="html"><![CDATA[<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><ul><li><p>hexo g  # 完整命令为hexo generate,用于生成静态文件</p></li><li><p>hexo s  # 完整命令为hexo server,用于启动服务器，主要用来本地预览</p></li><li><p>hexo d  # 完整命令为hexo deploy,用于将本地文件发布到github等git仓库上</p></li><li><p>hexo n “my article”  # 完整命令为hexo new,用于新建一篇名为“my article”的文章</p></li></ul>]]></content>
+        <content type="html"><![CDATA[<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><p>hexo g  # 完整命令为hexo generate,用于生成静态文件</p><p>hexo s  # 完整命令为hexo server,用于启动服务器，主要用来本地预览</p><p>hexo d  # 完整命令为hexo deploy,用于将本地文件发布到github等git仓库上</p><p>hexo n “my article”  # 完整命令为hexo new,用于新建一篇名为“my article”的文章</p><h1 id="重建-Hexo-项目"><a href="#重建-Hexo-项目" class="headerlink" title="重建 Hexo 项目"></a>重建 Hexo 项目</h1><p>hexo init new_blog        # 新建项目<br>cp -R old_blog&#x2F;source new_blog&#x2F;  # 复制文章<br>cp old_blog&#x2F;_config.yml new_blog&#x2F; # 复制配置<br>cd new_blog<br>npm install<br>hexo clean &amp;&amp; hexo g</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 生活 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> about </tag>
+            
+            <tag> myself </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>大模型相关概念</title>
+      <link href="/2025/06/10/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/"/>
+      <url>/2025/06/10/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/</url>
+      
+        <content type="html"><![CDATA[<h1 id="TensorRT-LLM"><a href="#TensorRT-LLM" class="headerlink" title="TensorRT-LLM"></a>TensorRT-LLM</h1><p>NVIDIA推出的开源库</p><p>TensorRT-LLM是NVIDIA推出的一个开源库，用于定义、优化和执行大型语言模型 (LLM) 在生产环境的推理。</p><p>TensorRT-LLM是NVIDIA用于做 LLM 的可扩展推理方案。该方案基于 TensorRT 深度学习编译框架来构建、编译并执行计算图，并借鉴了FastTransformer 中高效的 Kernels 实现，然后利用 NCCL 完成设备之间的通讯。</p><p>TensorRT-LLM开源程序库可加快 NVIDIA GPU 上大语言模型的推理性能。</p><p>关于TensorRT-LLM的使用，首先获得一个预训练好的模型，然后利用 TensorRT-LLM 提供的 API 对模型计算图进行改写和重建，接着用 TensorRT 进行编译优化，然后保存为序列化的 engine 进行推理部署。</p><p>例如Llama，首先安装TensorRT-LLM，下载预训练模型，接着利用 TensorRT-LLM 对模型进行编译，最后进行推理。</p><p>对于模型推理的调试，TensorRT-LLM 的调试方式与 TensorRT 一致。由于深度学习编译器，即 TensorRT，提供的优化之一是 layer 融合。因此，如果要输出某层的结果，就需要将对应层标记为输出层，以防止被编译器优化掉，然后与 baseline 进行对比分析。同时，每标记一个新的输出层，都要重新编译 TensorRT 的 engine。</p><p>对于自定义的层，TensorRT-LLM 提供了许多 Pytorch-like 算子帮助用户实现功能而不必自己编写 kernel。如样例所示，利用 TensorRT-LLM 提供的 API 实现了 rms norm 的逻辑，TensorRT 会自动生成 GPU 上对应的执行代码。</p><p>特点：</p><p>性能极致：基于 C++ 开发，有 NV 算子开发黑魔法加持，在其重点支持的场景里，性能可以做到极致。</p><p>优化技术丰富：提供自定义 Attention Kernel、Inflight Batching、Paged KV Caching、量化技术（FP8、INT4 AWQ、INT8 SmoothQuant 等）等多种优化技术，充分发挥 NVIDIA GPU 的推理性能。</p><p>部分开源：相比 vLLM 和 SGLang，其开源程度有限，这可能会对一些需要深度定制和了解内部原理的用户造成一定限制。</p><h1 id="vLLM"><a href="#vLLM" class="headerlink" title="vLLM"></a>vLLM</h1><p>vLLM 是一个基于 Python 开发的开源 LLM 推理引擎</p><p>特点：</p><p>技术创新：Paged Attention 技术创新性地解决了<strong>高吞吐</strong>场景下的性能问题。</p><p>兼顾性能和易用性：PA kernel 用 CUDA 开发，其余部分如 Batch 调度、模型定义、并行推理等使用 PyTorch 开发，在一定程度上兼顾了性能和灵活性，降低了开发者参与门槛。</p><p>开源社区成熟：开源社区经营方式成熟，汇聚了模型开发者、使用者和技术创新者等。</p><p>多硬件支持：支持 AMD、Intel 等厂商的 GPU，具有更广泛的硬件适应性。</p><p>了解 Paged Attention 技术的原理和优势，掌握 vLLM 的 Python API 使用方法，包括如何进行模型加载、推理请求的发送以及结果的处理等。同时，可以深入研究其基于 PyTorch 的架构设计，以便于进行二次开发和优化。</p><h1 id="SGLang"><a href="#SGLang" class="headerlink" title="SGLang"></a>SGLang</h1><p>SGLang 是 LMSYS Org 团队开发的一个用于 <strong>大型语言模型和视觉语言模型的快速服务框架</strong>，于 2025 年 1 月正式推出，采用 Apache 2.0 许可授权。</p><p>特点：</p><p>性能卓越：在运行 Llama 3.1 405B 等模型时，其吞吐量和延迟表现优于 vLLM 和 TensorRT-LLM，在某些情况下，吞吐量能达到 TensorRT-LLM 的 2.1 倍，vLLM 的 3.8 倍。</p><p>用户友好、易于定制：轻量级和模块化内核，完全用 Python 编写，核心调度器不到 4K 行代码，易于用户进行定制和修改。</p><p>集成多种技术：基于并增强了多个开源 LLM 服务引擎的优秀设计，利用了 FlashInfer 的高性能注意力 CUDA 内核，集成了受 gpt - fast 启发的 torch.compile，还引入了 RadixAttention 和压缩状态机等创新技术。</p><p>学习 SGLang 的 DSL（领域特定语言），了解如何通过前端定义来控制 LLM 的生成过程。深入研究其后端 Runtime 的核心创新优化点，如 RadixAttention 技术对于 KV 缓存重用的原理和实现方式。掌握 SGLang 与其他开源引擎的集成方法，以及如何利用其进行高效的模型服务。</p>]]></content>
       
       
       <categories>
